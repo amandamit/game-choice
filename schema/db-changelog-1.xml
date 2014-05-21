@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+         
+	<changeSet id="1" author="asmith">
+		<sql>
+			CREATE TABLE IF NOT EXISTS games (
+				id int auto_increment primary key,
+				name varchar(240) not null,
+				min_players int not null default 0,
+				max_players int,
+				playing_time_min int,
+				priority int not null default 100 
+					COMMENT 'Games with higher priority are more likely to be chosen',
+				created_on timestamp not null default now()
+			) ENGINE=innodb;
+			
+			CREATE TABLE IF NOT EXISTS expansions (
+				id int auto_increment primary key,
+				parent_game_id int not null,
+				name varchar(240) not null,
+				created_on timestamp not null default now()
+			) ENGINE=innodb;
+			
+			CREATE TABLE IF NOT EXISTS variants (
+				id int auto_increment primary key,
+				parent_game_id int not null,
+				name varchar(240) not null,
+				min_players int not null default 0,
+				max_players int,
+				playing_time_min int,
+				priority int not null default 100
+					COMMENT 'Variants with higher priority are more likely to be chosen',
+				created_on timestamp not null default now()
+			) ENGINE=innodb;
+		</sql>
+		<rollback>
+			<sql>
+			drop table if exists variants;
+			drop table if exists expansions;
+			drop table if exists games;
+			</sql>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

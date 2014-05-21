@@ -1,0 +1,1 @@
+liquibase --changeLogFile=db-changelog-master.xml --username=root --url="jdbc:mysql://localhost/board_games" --classpath=lib/mysql-connector-java-5.1.30-bin.jar --driver=com.mysql.jdbc.Driver update
